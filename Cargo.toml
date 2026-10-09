@@ -3,11 +3,11 @@ members = ["proc-macros"]
 
 [package]
 name = "bun-nuvon-bevy-utils"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2024"
 
 [dependencies]
-bevy = { version = "0.19.1", default-features = false }
+bevy = { version = "0.20.0", default-features = false }
 proc-macros = { path = "proc-macros" }
 
 [features]

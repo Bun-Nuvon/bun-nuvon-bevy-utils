@@ -12,7 +12,6 @@ use bevy::{
         schedule::IntoScheduleConfigs,
         system::{Commands, Populated, Query, Res, Single},
     },
-    feathers::cursor::{CursorIconPlugin, EntityCursor},
     input::{ButtonInput, keyboard::KeyCode},
     input_focus::{
         InputFocus,
@@ -21,7 +20,8 @@ use bevy::{
     math::Vec2,
     picking::{
         backend::HitData,
-        events::{Click, Pointer},
+        cursor::{CursorIconPlugin, EntityCursor},
+        events::{Pointer, PointerClick},
         hover::Hovered,
         pointer::{Location, PointerButton, PointerId},
     },
@@ -34,7 +34,7 @@ use proc_macros::marker_component_bundle;
 /// Helper component for a button widget
 #[marker_component_bundle]
 #[require(
-    bevy::prelude::Button,
+    bevy::ui_widgets::Button,
     Hovered,
     TabIndex,
     EntityCursor::System(SystemCursorIcon::Pointer)
@@ -102,23 +102,23 @@ fn click_focus(
         && buttons.contains(entity)
     {
         // Is there a better way to do this?
-        commands.trigger(Pointer::new(
-            PointerId::Mouse,
-            Location {
-                target: NormalizedRenderTarget::None {
-                    width: 1,
-                    height: 1,
-                },
-                position: Vec2::ZERO,
-            },
-            Click {
-                button: PointerButton::Primary,
-                hit: HitData::new(camera.into_inner(), 0.0, None, None),
-                duration: Duration::from_millis(1),
-                count: 1,
-            },
+        commands.trigger(PointerClick {
             entity,
-        ));
+            pointer: Pointer::new(
+                PointerId::Mouse,
+                Location {
+                    target: NormalizedRenderTarget::None {
+                        width: 1,
+                        height: 1,
+                    },
+                    position: Vec2::ZERO,
+                },
+            ),
+            button: PointerButton::Primary,
+            hit: HitData::new(camera.into_inner(), 0.0, None, None),
+            duration: Duration::from_millis(1),
+            count: 1,
+        });
     }
 }
 
