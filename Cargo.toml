@@ -1,15 +1,16 @@
 [workspace]
-members = ["proc-macros"]
+members = ["proc-macros", "ui"]
 
 [package]
 name = "bun-nuvon-bevy-utils"
-version = "0.3.0"
+version = "0.3.1"
 edition = "2024"
 
 [dependencies]
 bevy = { version = "0.20.0", default-features = false }
 proc-macros = { path = "proc-macros" }
+ui = { path = "ui", optional = true }
 
 [features]
 default = ["ui"]
-ui = ["bevy/ui", "bevy/bevy_feathers"]
+ui = ["dep:ui"]

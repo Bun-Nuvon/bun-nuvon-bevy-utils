@@ -1,7 +1,7 @@
-#[cfg(feature = "ui")]
-pub mod ui;
-
 pub use proc_macros::*;
+
+#[cfg(feature = "ui")]
+pub use ui::*;
 
 use bevy::math::Vec2;
 
