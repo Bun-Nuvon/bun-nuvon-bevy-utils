@@ -1,8 +1,7 @@
 [package]
 name = "animation"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 
 [dependencies]
-bevy = { version = "0.20.0", default-features = false, features = [] }
-proc-macros = { path = "../proc-macros" }
+bevy = { version = "0.20.0", default-features = false }
