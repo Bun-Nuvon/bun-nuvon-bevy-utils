@@ -1,7 +1,10 @@
+#[cfg(feature = "animation")]
+pub use animation;
+
 pub use proc_macros::*;
 
 #[cfg(feature = "ui")]
-pub use ui::*;
+pub use ui;
 
 use bevy::math::Vec2;
 
