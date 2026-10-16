@@ -17,6 +17,7 @@ use bevy::{
 
 use crate::animate::{AnimatableUiTranslation, Animate, InitialAnimateValue};
 
+/// Plugin for handling animations using [Animate]
 pub struct AnimationPlugin;
 
 impl Plugin for AnimationPlugin {

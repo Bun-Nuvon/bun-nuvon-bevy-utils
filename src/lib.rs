@@ -1,3 +1,6 @@
+#![warn(missing_docs)]
+#![doc = include_str!("../README.md")]
+
 #[cfg(feature = "animation")]
 pub use animation;
 

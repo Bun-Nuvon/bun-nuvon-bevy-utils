@@ -1,3 +1,6 @@
+#![warn(missing_docs)]
+#![doc = include_str!("../README.md")]
+
 use std::time::Duration;
 
 use bevy::{
@@ -53,6 +56,7 @@ pub struct Slider;
 
 /// Plugin for all widget systems
 pub struct UiPlugin {
+    /// The outline color of focuses widgets
     pub focus_color: Color,
 }
 
