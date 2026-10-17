@@ -13,14 +13,22 @@ use bevy::{
     utils::default,
 };
 
+/// Initial component value to set before the animation starts.
+/// This should usually be ignored when working with custom animations.
 #[derive(Clone, Debug, PartialEq, Reflect)]
 #[reflect(Clone, PartialEq, Debug)]
-pub(crate) enum InitialAnimateValue {
+pub enum InitialAnimateValue {
+    /// Initial value for [Transform::translation]
     Translate(Vec3),
+    /// Initial value for [UiTransform::translation]
     UiTranslate(Vec2),
+    /// Initial value for [Transform::rotation]
     Rotate(Quat),
+    /// Initial value for [UiTransform::rotation]
     UiRotate(Rot2),
+    /// Initial value for [Transform::scale]
     Scale(Vec3),
+    /// Initial value for [UiTransform::scale]
     UiScale(Vec2),
 }
 
@@ -36,7 +44,9 @@ pub struct Animate {
     pub target_id: AnimationTargetId,
     /// The delay of the animation
     pub delay: f32,
-    pub(crate) init: Option<InitialAnimateValue>,
+    /// Set an initial value for the component to animate to prevent a jump when the animation starts.
+    /// You can probably ignore this if you are making a custom animation.
+    pub init: Option<InitialAnimateValue>,
 }
 
 impl Default for Animate {
@@ -49,7 +59,8 @@ impl Default for Animate {
 }
 
 impl Animate {
-    fn build<P>(
+    /// Build an animation, animating a custom property `P`
+    pub fn build<P>(
         init: impl Into<Option<InitialAnimateValue>>,
         property: P,
         start: P::Property,
