@@ -1,11 +1,8 @@
 #![warn(missing_docs)]
 #![doc = include_str!("../README.md")]
 
-use std::time::Duration;
-
 use bevy::{
-    app::{App, Plugin, PostUpdate, PreUpdate, Update},
-    camera::{Camera, NormalizedRenderTarget},
+    app::{App, Plugin, PostUpdate, Update},
     color::Color,
     ecs::{
         entity::Entity,
@@ -13,20 +10,15 @@ use bevy::{
         observer::On,
         query::{Changed, Has, With, Without},
         schedule::IntoScheduleConfigs,
-        system::{Commands, Populated, Query, Res, Single},
+        system::{Commands, Populated, Query, Res},
     },
-    input::{ButtonInput, keyboard::KeyCode},
     input_focus::{
         InputFocus,
         tab_navigation::{TabIndex, TabNavigationPlugin},
     },
-    math::Vec2,
     picking::{
-        backend::HitData,
         cursor::{CursorIconPlugin, EntityCursor},
-        events::{Pointer, PointerClick},
         hover::Hovered,
-        pointer::{Location, PointerButton, PointerId},
     },
     ui::{Node, Outline, UiSystems, Val},
     ui_widgets::{SliderRange, SliderThumb, SliderValue, ValueChange},
@@ -63,7 +55,6 @@ pub struct UiPlugin {
 impl Plugin for UiPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins((TabNavigationPlugin, CursorIconPlugin))
-            .add_systems(PreUpdate, click_focus)
             .add_systems(Update, slider_change)
             .add_systems(
                 PostUpdate,
@@ -90,39 +81,6 @@ fn focus_outline(
                 commands.entity(entity).remove::<Outline>();
             }
         }
-    }
-}
-
-/// Click button when focused and keys are pressed
-fn click_focus(
-    mut commands: Commands,
-    keys: Res<ButtonInput<KeyCode>>,
-    focus: Res<InputFocus>,
-    buttons: Query<(), With<Button>>,
-    camera: Single<Entity, With<Camera>>,
-) {
-    if keys.any_just_pressed(vec![KeyCode::Enter, KeyCode::NumpadEnter, KeyCode::Space])
-        && let Some(entity) = focus.get()
-        && buttons.contains(entity)
-    {
-        // Is there a better way to do this?
-        commands.trigger(PointerClick {
-            entity,
-            pointer: Pointer::new(
-                PointerId::Mouse,
-                Location {
-                    target: NormalizedRenderTarget::None {
-                        width: 1,
-                        height: 1,
-                    },
-                    position: Vec2::ZERO,
-                },
-            ),
-            button: PointerButton::Primary,
-            hit: HitData::new(camera.into_inner(), 0.0, None, None),
-            duration: Duration::from_millis(1),
-            count: 1,
-        });
     }
 }
 
