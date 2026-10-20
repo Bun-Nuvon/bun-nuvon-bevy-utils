@@ -2,7 +2,7 @@
 #![doc = include_str!("../README.md")]
 
 pub use animate::*;
-pub use plugin::*;
+pub use plugin::AnimationPlugin;
 
 mod animate;
 mod plugin;
