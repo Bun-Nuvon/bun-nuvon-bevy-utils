@@ -1,8 +1,9 @@
 [package]
 name = "ui"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2024"
 
 [dependencies]
+functions = { path = "../functions" }
 bevy = { version = "0.20.0", default-features = false, features = ["ui"] }
 proc-macros = { path = "../proc-macros" }

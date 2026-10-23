@@ -1,9 +1,9 @@
 [workspace]
-members = ["animation", "proc-macros", "ui"]
+members = ["animation", "functions", "proc-macros", "ui"]
 
 [package]
 name = "bun-nuvon-bevy-utils"
-version = "0.3.3"
+version = "0.4.0"
 edition = "2024"
 description = "Utility library for Bun-Nuvon games made with Bevy"
 homepage = "https://github.com/Bun-Nuvon/bun-nuvon-bevy-utils"
@@ -11,9 +11,9 @@ license = "MIT OR Apache-2.0"
 repository = "https://github.com/Bun-Nuvon/bun-nuvon-bevy-utils"
 
 [dependencies]
-bevy = { version = "0.20.0", default-features = false }
-proc-macros = { path = "proc-macros" }
 animation = { path = "animation", optional = true }
+functions = { path = "functions" }
+proc-macros = { path = "proc-macros" }
 ui = { path = "ui", optional = true }
 
 [features]

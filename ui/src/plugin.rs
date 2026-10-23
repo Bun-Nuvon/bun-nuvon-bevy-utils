@@ -5,17 +5,17 @@ use bevy::{
         entity::Entity,
         hierarchy::Children,
         observer::On,
-        query::{Changed, Has, With, Without},
+        query::{Has, With, Without},
         schedule::IntoScheduleConfigs,
         system::{Commands, Populated, Query, Res},
     },
     input_focus::{InputFocus, tab_navigation::TabNavigationPlugin},
     picking::{cursor::CursorIconPlugin, hover::Hovered},
-    ui::{Node, Outline, UiSystems, Val},
+    ui::{ComputedNode, Node, Outline, UiSystems, Val},
     ui_widgets::{SliderRange, SliderThumb, SliderValue, ValueChange},
 };
 
-use crate::{Button, Progress, ProgressInner, Slider};
+use crate::{Button, Progress, ProgressFill, Slider};
 
 /// Plugin for all widget systems
 pub struct UiPlugin {
@@ -59,32 +59,36 @@ fn focus_outline(
 }
 
 fn slider_change(
-    sliders: Query<(Entity, &SliderValue, &SliderRange), (Changed<SliderValue>, With<Slider>)>,
+    sliders: Query<(Entity, &ComputedNode, &SliderValue, &SliderRange), With<Slider>>,
     children: Query<&Children>,
-    mut thumbs: Query<(&mut Node, Has<SliderThumb>), Without<Slider>>,
+    mut thumbs: Query<(&mut Node, &ComputedNode, Has<SliderThumb>), Without<Slider>>,
 ) {
-    for (entity, value, range) in sliders {
+    for (entity, parent_computed, value, range) in sliders {
         for child in children.iter_descendants(entity) {
-            if let Ok((mut node, is_thumb)) = thumbs.get_mut(child)
+            if let Ok((mut node, computed, is_thumb)) = thumbs.get_mut(child)
                 && is_thumb
             {
-                node.left = Val::Percent(range.thumb_position(value.0) * 100.0);
+                node.left = Val::Px(
+                    range.thumb_position(value.0)
+                        * (parent_computed.size().x - computed.size().x)
+                        * parent_computed.inverse_scale_factor(),
+                );
             }
         }
     }
 }
 
 fn update_progress(
-    progresses: Query<(Entity, &Progress), Changed<Progress>>,
+    progresses: Query<(Entity, &Progress)>,
     children: Query<&Children>,
-    mut inners: Query<(&mut Node, Has<ProgressInner>), Without<Progress>>,
+    mut fills: Query<(&mut Node, Has<ProgressFill>), Without<Progress>>,
 ) {
     for (entity, progress) in progresses {
         for child in children.iter_descendants(entity) {
-            if let Ok((mut node, is_inner)) = inners.get_mut(child)
+            if let Ok((mut node, is_inner)) = fills.get_mut(child)
                 && is_inner
             {
-                node.left = Val::Percent(progress.0 * 100.0);
+                node.width = Val::Percent(progress.0 * 100.0);
             }
         }
     }
